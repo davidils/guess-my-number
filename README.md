@@ -8,4 +8,4 @@ In this project, the HTML and CSS files were already given. The goal was to teac
 
 ### About the game
 
-The goal of this game is to guess a secret number between 1 and 20. In the beginng of the game a random number will be chosen. Based on the user input the value will be checked. The game can be played multiple times, so try to beat your own highscore!
+The goal of this game is to guess a secret number between 1 and 20. In the beginning of the game, a random number will be chosen. Based on the user input, the value will be checked. The game can be played multiple times, so try to beat your own high score!
