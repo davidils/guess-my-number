@@ -1,76 +1,76 @@
 'use strict';
 
-/* console.log(document.querySelector('.message').textContent);
-
-document.querySelector('.message').textContent = '🎉 Correct Number!';
-
-document.querySelector('.number').textContent = 10;
-document.querySelector('.score').textContent = 20;
-
-document.querySelector('.guess').value = 30; */
-
-let secretNumber = Math.trunc(Math.random() * 20) + 1;
+let secretNumber = createSecretNumber();
 let score = 20;
 let highScore = 0;
-document.querySelector('.score').textContent = score;
-document.querySelector('.highscore').textContent = highScore;
+updateScore(score);
+updateHighScore(highScore);
 
-// again function
-document.querySelector('.again').addEventListener('click', function () {
-  // reassign values
-  secretNumber = Math.trunc(Math.random() * 20) + 1;
-  score = 20;
+function displayMessage(message) {
+  document.querySelector('.message').textContent = message;
+}
 
-  // reset ui elements
+function updateScore(score) {
   document.querySelector('.score').textContent = score;
+}
+
+function updateHighScore(highScore) {
+  document.querySelector('.highscore').textContent = highScore;
+}
+
+function createSecretNumber() {
+  return Math.trunc(Math.random() * 20) + 1;
+}
+
+function resetUI() {
   document.querySelector('.guess').value = '';
   document.querySelector('.number').textContent = '?';
-  document.querySelector('.message').textContent = 'Start guessing again...';
+  displayMessage('Start guessing...');
   document.querySelector('body').style.backgroundColor = '#222';
   document.querySelector('.number').style.width = '15rem';
+}
+
+function showWinnerUI() {
+  document.querySelector('.number').textContent = secretNumber;
+  document.querySelector('body').style.backgroundColor = '#60b347';
+  document.querySelector('.number').style.width = '30rem';
+}
+
+// When the user clicks on the "Again!" button
+document.querySelector('.again').addEventListener('click', function () {
+  secretNumber = createSecretNumber();
+  score = 20;
+
+  updateScore(score);
+  resetUI();
 });
 
-// check guess function
+// // When the user clicks on the "Check!" button
 document.querySelector('.check').addEventListener('click', function () {
   const guess = Number(document.querySelector('.guess').value);
-  console.log(guess, typeof guess);
 
-  // when there is no input
+  // No input
   if (!guess) {
-    document.querySelector('.message').textContent = '🚫 No number!';
+    displayMessage('No number!');
 
-    // when player wins
+    // User guessed the correct number
   } else if (guess === secretNumber) {
-    document.querySelector('.message').textContent = '🎉 Correct Number!';
-    document.querySelector('.number').textContent = secretNumber;
-    document.querySelector('body').style.backgroundColor = '#60b347';
-    document.querySelector('.number').style.width = '30rem';
-
+    displayMessage('Correct Number!');
+    showWinnerUI();
     if (score > highScore) {
       highScore = score;
-      document.querySelector('.highscore').textContent = highScore;
+      updateHighScore(highScore);
     }
 
-    // when guess is too high
-  } else if (guess > secretNumber) {
+    // User did not guess the correct number
+  } else if (guess !== secretNumber) {
     if (score > 1) {
-      document.querySelector('.message').textContent = '📈 Too high!';
+      displayMessage(guess > secretNumber ? 'Too high!' : 'Too low!');
       score--;
-      document.querySelector('.score').textContent = score;
+      updateScore(score);
     } else {
-      document.querySelector('.message').textContent = '💥 You lost the game!';
-      document.querySelector('.score').textContent = 0;
-    }
-
-    // when guess is too low
-  } else if (guess < secretNumber) {
-    if (score > 1) {
-      document.querySelector('.message').textContent = '📉 Too low!';
-      score--;
-      document.querySelector('.score').textContent = score;
-    } else {
-      document.querySelector('.message').textContent = '💥 You lost the game!';
-      document.querySelector('.score').textContent = 0;
+      displayMessage('You lost the game!');
+      updateScore(0);
     }
   }
 });
